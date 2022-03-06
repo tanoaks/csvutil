@@ -10,39 +10,45 @@ def get_value(row, data):
     return row[ref_dict.get(data)]
 
 
-def rule_create_bp(row, csvwriter):
+def rule_create_bp(row):
     bp = float(get_value(row, 'z')) + float(get_value(row, 'ab')) + float(get_value(row, 'ad'))
     row[ref_dict.get('bp')] = bp
+    return 'added  bp'
 
 
-def rule_bp_equal_au(row, csvwriter):
+def rule_bp_equal_au(row, log):
     bp = float(get_value(row, 'bp'))
     au = float(get_value(row, 'au'))
     if au != bp:
-        row[ref_dict.get('bq')] = 'error row BP not equal AU'
+        log = log + 'error row BP not equal AU'
+    return log
+    
 
 
-def rule_au_zero_al(row, csvwriter):
+def rule_au_zero_al(row, log):
     au = float(get_value(row, 'au'))
     al = float(get_value(row, 'al'))
     if (au == 0) and (al != 0):
-        row[ref_dict.get('bq')] = row[ref_dict.get('bq')] + ' :error row AU zero equal AU but AL not zero'
+        log = log + ' :error row AU zero equal AU but AL not zero'
+    return log
 
 
-def rule_state_code_bl(row, csvwriter):
+def rule_state_code_bl(row, log):
     gst_tin = str(get_value(row, 'c')).strip()
     state_code = int(gst_tin[0:2])
     row[ref_dict.get('bl')] = state_data[str(state_code)]
+    return log
 
 
-def rule_bl_not_equal_q(row, csvwriter):
+def rule_bl_not_equal_q(row, log):
     q = str(get_value(row, 'q')).strip()
     bl = str(get_value(row, 'bl')).strip()
     if q.lower() != bl.lower():
-        row[ref_dict.get('bq')] = row[ref_dict.get('bq')] + ' :error row BL not equal Q'
+        log = log + ' :error row BL not equal Q'
+    return log
 
 
-def rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, csvwriter):
+def rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, log):
     k = str(get_value(row, 'k')).strip()
     bl = str(get_value(row, 'bl')).strip()
     aq = str(get_value(row, 'k')).strip()
@@ -56,20 +62,23 @@ def rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_z
         if ai == 0.0 and ak == 0.0 and bg == 0.0 and bh == 0.0 and ag > 0.0 and bf > 0.0:
             pass
         else:
-            row[ref_dict.get('bq')] = row[ref_dict.get('bq')] + ' :invoice error'
+            log = log + ' :invoice error'
+    return log
             
 
-def rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row):
+def rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row, log):
     if k.lower() == 'invoice':
         row[ref_dict.get('bs')] = str(get_value(row, 'bc')).strip()
         row[ref_dict.get('bt')] = str(get_value(row, 'bd')).strip()
         row[ref_dict.get('bv')] = str(get_value(row, 'ag')).strip()
         row[ref_dict.get('bw')] = str(get_value(row, 'ai')).strip()
         row[ref_dict.get('bx')] = str(get_value(row, 'ak')).strip()
+    return log
    
-def rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row):
+def rule_column_k_credit_note_then_set_bu(row, log):
     if k.lower() == 'credit note':
         row[ref_dict.get('bu')] = str(get_value(row, 'bd')).strip()
+    return log
     
 
 def apply_rule(file_read, write_file):
@@ -79,14 +88,15 @@ def apply_rule(file_read, write_file):
     header = next(csvreader)
     csvwriter = csv.writer(write_file)
     for row in csvreader:
-        rule_create_bp(row, csvwriter)
-        rule_bp_equal_au(row, csvwriter)
-        rule_au_zero_al(row, csvwriter)
-        rule_state_code_bl(row, csvwriter)
-        rule_bl_not_equal_q(row, csvwriter)
-        rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, csvwriter)
-        rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row)
-        rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row)
+        log = rule_create_bp(row)
+        log = rule_bp_equal_au(row, log)
+        log = rule_au_zero_al(row, log)
+        log = rule_state_code_bl(row, log)
+        log = rule_bl_not_equal_q(row, log)
+        log = rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, log)
+        log = rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row, log)
+        log = rule_column_k_credit_note_then_set_bu(row, log)
+        row.append(log)
         csvwriter.writerow(row)
 
     write_file.close()
