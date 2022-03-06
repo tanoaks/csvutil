@@ -57,7 +57,20 @@ def rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_z
             pass
         else:
             row[ref_dict.get('bq')] = row[ref_dict.get('bq')] + ' :invoice error'
+            
 
+def rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row):
+    if k.lower() == 'invoice':
+        row[ref_dict.get('bs')] = str(get_value(row, 'bc')).strip()
+        row[ref_dict.get('bt')] = str(get_value(row, 'bd')).strip()
+        row[ref_dict.get('bv')] = str(get_value(row, 'ag')).strip()
+        row[ref_dict.get('bw')] = str(get_value(row, 'ai')).strip()
+        row[ref_dict.get('bx')] = str(get_value(row, 'ak')).strip()
+   
+def rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row):
+    if k.lower() == 'credit note':
+        row[ref_dict.get('bu')] = str(get_value(row, 'bd')).strip()
+    
 
 def apply_rule(file_read, write_file):
     print(file_read)
@@ -72,6 +85,8 @@ def apply_rule(file_read, write_file):
         rule_state_code_bl(row, csvwriter)
         rule_bl_not_equal_q(row, csvwriter)
         rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, csvwriter)
+        rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row)
+        rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row)
         csvwriter.writerow(row)
 
     write_file.close()
