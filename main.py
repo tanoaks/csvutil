@@ -11,20 +11,20 @@ def get_value(row, data):
 
 
 def rule_create_bp(row, csvwriter):
-    bp = int(get_value(row, 'z')) + int(get_value(row, 'ab')) + int(get_value(row, 'ad'))
+    bp = float(get_value(row, 'z')) + float(get_value(row, 'ab')) + float(get_value(row, 'ad'))
     row[ref_dict.get('bp')] = bp
 
 
 def rule_bp_equal_au(row, csvwriter):
-    bp = int(get_value(row, 'bp'))
-    au = int(get_value(row, 'au'))
+    bp = float(get_value(row, 'bp'))
+    au = float(get_value(row, 'au'))
     if au != bp:
         row[ref_dict.get('bq')] = 'error row BP not equal AU'
 
 
 def rule_au_zero_al(row, csvwriter):
-    au = int(get_value(row, 'au'))
-    al = int(get_value(row, 'al'))
+    au = float(get_value(row, 'au'))
+    al = float(get_value(row, 'al'))
     if (au == 0) and (al != 0):
         row[ref_dict.get('bq')] = row[ref_dict.get('bq')] + ' :error row AU zero equal AU but AL not zero'
 
@@ -46,14 +46,14 @@ def rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_z
     k = str(get_value(row, 'k')).strip()
     bl = str(get_value(row, 'bl')).strip()
     aq = str(get_value(row, 'k')).strip()
-    ai = int(get_value(row, 'ai'))
-    ak = int(get_value(row, 'ak'))
-    bg = int(get_value(row, 'bg'))
-    bh = int(get_value(row, 'bh'))
-    ag = int(get_value(row, 'ag'))
-    bf = int(get_value(row, 'bf'))
+    ai = float(get_value(row, 'ai'))
+    ak = float(get_value(row, 'ak'))
+    bg = float(get_value(row, 'bg'))
+    bh = float(get_value(row, 'bh'))
+    ag = float(get_value(row, 'ag'))
+    bf = float(get_value(row, 'bf'))
     if k.lower() == 'invoice' and bl != aq:
-        if ai == 0 and ak == 0 and bg == 0 and bh == 0 and ag > 0 and bf > 0:
+        if ai == 0.0 and ak == 0.0 and bg == 0.0 and bh == 0.0 and ag > 0.0 and bf > 0.0:
             pass
         else:
             row[ref_dict.get('bq')] = row[ref_dict.get('bq')] + ' :invoice error'
