@@ -88,14 +88,38 @@ def apply_rule(file_read, write_file):
     header = next(csvreader)
     csvwriter = csv.writer(write_file)
     for row in csvreader:
-        log = rule_create_bp(row)
-        log = rule_bp_equal_au(row, log)
-        log = rule_au_zero_al(row, log)
-        log = rule_state_code_bl(row, log)
-        log = rule_bl_not_equal_q(row, log)
-        log = rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, log)
-        log = rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row, log)
-        log = rule_column_k_credit_note_then_set_bu(row, log)
+        try:
+            log = rule_create_bp(row)
+        except Exception as inst:
+            print('exception')
+        try:
+            log = rule_bp_equal_au(row, log)
+        except Exception as inst:
+            print('exception')
+        try:
+            log = rule_au_zero_al(row, log)
+        except Exception as inst:
+            print('exception')
+        try:
+            log = rule_state_code_bl(row, log)
+        except Exception as inst:
+            print('exception')
+        try:
+            log = rule_bl_not_equal_q(row, log)
+        except Exception as inst:
+            print('exception')
+        try:
+            log = rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, log)
+        except Exception as inst:
+            print('exception')
+        try:
+            log = rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row, log)
+        except Exception as inst:
+            print('exception')
+        try:
+            log = rule_column_k_credit_note_then_set_bu(row, log)
+        except Exception as inst:
+            print('exception')
         row.append(log)
         csvwriter.writerow(row)
 
