@@ -13,7 +13,7 @@ def get_value(row, data):
 def rule_create_bp(row):
     bp = float(get_value(row, 'z')) + float(get_value(row, 'ab')) + float(get_value(row, 'ad'))
     row[ref_dict.get('bp')] = bp
-    return 'added  bp'
+    return 'added  bp '
 
 
 def rule_bp_equal_au(row, log):
@@ -22,7 +22,6 @@ def rule_bp_equal_au(row, log):
     if au != bp:
         log = log + 'error row BP not equal AU'
     return log
-    
 
 
 def rule_au_zero_al(row, log):
@@ -64,9 +63,10 @@ def rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_z
         else:
             log = log + ' :invoice error'
     return log
-            
+
 
 def rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row, log):
+    k = str(get_value(row, 'k')).strip()
     if k.lower() == 'invoice':
         row[ref_dict.get('bs')] = str(get_value(row, 'bc')).strip()
         row[ref_dict.get('bt')] = str(get_value(row, 'bd')).strip()
@@ -74,52 +74,55 @@ def rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row, log):
         row[ref_dict.get('bw')] = str(get_value(row, 'ai')).strip()
         row[ref_dict.get('bx')] = str(get_value(row, 'ak')).strip()
     return log
-   
+
+
 def rule_column_k_credit_note_then_set_bu(row, log):
+    k = str(get_value(row, 'k')).strip()
     if k.lower() == 'credit note':
         row[ref_dict.get('bu')] = str(get_value(row, 'bd')).strip()
     return log
-    
+
 
 def apply_rule(file_read, write_file):
     print(file_read)
     csvreader = csv.reader(file_read)
-    header = []
     header = next(csvreader)
     csvwriter = csv.writer(write_file)
+    csvwriter.writerow(header)
+    log = ''
     for row in csvreader:
         try:
             log = rule_create_bp(row)
         except Exception as inst:
-            print('exception')
+            print('exp1')
         try:
             log = rule_bp_equal_au(row, log)
         except Exception as inst:
-            print('exception')
+            print('exp2')
         try:
             log = rule_au_zero_al(row, log)
         except Exception as inst:
-            print('exception')
+            print('exp3')
         try:
             log = rule_state_code_bl(row, log)
         except Exception as inst:
-            print('exception')
+            print('exp4')
         try:
             log = rule_bl_not_equal_q(row, log)
         except Exception as inst:
-            print('exception')
+            print('exp5')
         try:
             log = rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, log)
         except Exception as inst:
-            print('exception')
+            print('exp6')
         try:
             log = rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row, log)
         except Exception as inst:
-            print('exception')
+            print('excp7')
         try:
             log = rule_column_k_credit_note_then_set_bu(row, log)
         except Exception as inst:
-            print('exception')
+            print('exp8')
         row.append(log)
         csvwriter.writerow(row)
 
@@ -142,7 +145,7 @@ def create_array():
     ref_abc = []
     for i in range(0, 26):
         ref_abc.append(chr(i + ord('a')))
-    for i in range(1, 67):
+    for i in range(0, 67):
         ref_abc.append(str(ref_abc[(i // 26)] + ref_abc[(i % 26)]))
     print(ref_abc)
     for i in range(0, len(ref_abc)):
