@@ -87,6 +87,7 @@ def apply_rule(file_read, write_file):
     print(file_read)
     csvreader = csv.reader(file_read)
     header = next(csvreader)
+    header.append('errors')
     csvwriter = csv.writer(write_file)
     csvwriter.writerow(header)
     log = ''
