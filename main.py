@@ -50,7 +50,7 @@ def rule_bl_not_equal_q(row, log):
 def rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_zero(row, log):
     k = str(get_value(row, 'k')).strip()
     bl = str(get_value(row, 'bl')).strip()
-    aq = str(get_value(row, 'k')).strip()
+    aq = str(get_value(row, 'aq')).strip()
     ai = float(get_value(row, 'ai'))
     ak = float(get_value(row, 'ak'))
     bg = float(get_value(row, 'bg'))
