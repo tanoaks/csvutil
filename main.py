@@ -137,8 +137,8 @@ def main():
     o_path = os.path.join(directory, 'out')
     all_file = os.listdir(dpath)
     for file in all_file:
-        file_data = open(os.path.join(dpath, file), encoding="utf-8")
-        write_file = open(os.path.join(o_path, file), 'w')
+        file_data = open(os.path.join(dpath, file), encoding='utf-8')
+        write_file = open(os.path.join(o_path, file), 'w', encoding='utf-8')
         apply_rule(file_data, write_file)
 
 
