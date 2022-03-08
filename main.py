@@ -13,7 +13,7 @@ def get_value(row, data):
 def rule_create_bp(row):
     bp = float(get_value(row, 'z')) + float(get_value(row, 'ab')) + float(get_value(row, 'ad'))
     row[ref_dict.get('bp')] = bp
-    return 'added  bp '
+    return ''
 
 
 def rule_bp_equal_au(row, log):
