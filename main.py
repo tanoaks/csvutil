@@ -76,7 +76,7 @@ def rule_k_equal_invoice_and_bl_eq_aq_then_ai_ak_bg_bh_greater_zero(row, log):
     ag = float(get_value(row, 'ag'))
     bf = float(get_value(row, 'bf'))
     if k.lower() == 'invoice' and bl == aq:
-        if ai > 0.0 and ak > 0.0 and bg > 0.0 and bh => 0.0 and ag == 0.0 and bf == 0.0:
+        if ai > 0.0 and ak > 0.0 and bg > 0.0 and bh > 0.0 and ag == 0.0 and bf == 0.0:
             pass
         else:
             log = log + '  :invoice error k_equal_invoice_and_bl_eq_aq_then_ai_ak_bg_bh_greater_zero'
