@@ -11,7 +11,8 @@ def get_value(row, data):
 
 
 def rule_create_bp(row):
-    bp = float(get_value(row, 'z')) + float(get_value(row, 'ab')) + float(get_value(row, 'ad'))
+    bp = bp = float(get_value(row, 'z')) + float(get_value(row, 'ab')) + float(get_value(row, 'ad')) + \
+         float(get_value(row, 'x'))
     row[ref_dict.get('bp')] = bp
     return ''
 
