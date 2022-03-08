@@ -65,6 +65,24 @@ def rule_k_equal_invoice_and_bl_not_aq_then_ai_ak_bg_bh_zero_and_ag_bf_greater_z
     return log
 
 
+def rule_k_equal_invoice_and_bl_eq_aq_then_ai_ak_bg_bh_greater_zero(row, log):
+    k = str(get_value(row, 'k')).strip()
+    bl = str(get_value(row, 'bl')).strip()
+    aq = str(get_value(row, 'aq')).strip()
+    ai = float(get_value(row, 'ai'))
+    ak = float(get_value(row, 'ak'))
+    bg = float(get_value(row, 'bg'))
+    bh = float(get_value(row, 'bh'))
+    ag = float(get_value(row, 'ag'))
+    bf = float(get_value(row, 'bf'))
+    if k.lower() == 'invoice' and bl == aq:
+        if ai > 0.0 and ak > 0.0 and bg > 0.0 and bh => 0.0 and ag == 0.0 and bf == 0.0:
+            pass
+        else:
+            log = log + '  :invoice error k_equal_invoice_and_bl_eq_aq_then_ai_ak_bg_bh_greater_zero'
+    return log
+
+
 def rule_column_k_invoice_then_set_bs_bt_bv_bw_bx(row, log):
     k = str(get_value(row, 'k')).strip()
     if k.lower() == 'invoice':
@@ -124,6 +142,11 @@ def apply_rule(file_read, write_file):
             log = rule_column_k_credit_note_then_set_bu(row, log)
         except Exception as inst:
             print('exp8')
+        try:
+            log = rule_k_equal_invoice_and_bl_eq_aq_then_ai_ak_bg_bh_greater_zero(row, log)
+        except Exception as inst:
+            print('exp8')
+         
         row.append(log)
         csvwriter.writerow(row)
 
